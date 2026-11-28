@@ -234,7 +234,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
  #logo{width:100%;max-width:340px;margin:0 auto}
  #menu h1{font-size:40px;margin-top:20px}
  .mcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
- .mcards .card:first-child{grid-column:1/-1}
+ .mcards .card:first-child,.mcards #pcard+.card{grid-column:1/-1}
  .mcards .card{display:flex;flex-direction:column}.mcards .card .big{margin-top:auto}
  .mcards .card:last-child .big{margin-top:0}
  #jc{font-size:20px;padding:12px}
@@ -278,6 +278,27 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @keyframes hb{0%,100%{opacity:.92}15%{opacity:1}30%{opacity:.86}45%{opacity:1}}
 #bldv{position:fixed;inset:0;z-index:60;pointer-events:none;display:none;box-shadow:inset 0 0 120px 50px rgba(120,0,0,.85);background:rgba(80,0,0,.18)}
 body.blind #bldv{display:block;animation:hb 1.1s ease-in-out infinite}
+
+#lvl .nm.on{background:linear-gradient(90deg,#7a0010,#c2185b);color:#fff}
+#prof[hidden]{display:none}
+.phead{display:flex;align-items:center;gap:14px;margin:10px 0 14px}.phead h1{margin:0;font-size:26px}.phead .sub{margin:2px 0 0}
+.av{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#d7d7d7;background-color:#6b6b6b!important;background-size:cover!important;background-position:center!important;flex:none;box-shadow:0 0 0 3px var(--panel)}.av svg{width:62%;height:62%}.av.ph{background-color:#333!important}
+.avw{position:relative;cursor:pointer;flex:none}.avw .av{width:84px;height:84px}.avcam{position:absolute;right:-4px;bottom:-2px;background:var(--accent);color:#fff;font:700 11px/1 "Trebuchet MS",sans-serif;padding:5px 7px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+#prmph{margin-top:6px;padding:6px 10px;font-size:13px}#prmph[hidden]{display:none}
+#rsc{position:fixed;inset:0;z-index:85;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px}#rsc[hidden]{display:none}#rsc .card{max-width:340px;width:100%;margin:0;text-align:center}#rsc .row2{display:flex;gap:8px}#rsc .row2 button{flex:1}#rsy{background:#a3262a!important;color:#fff;font-weight:700}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.tile{background:var(--panel);border-radius:10px;padding:10px;text-align:center}.tile b{display:block;font-size:22px;font-variant-numeric:tabular-nums}.tile span{font-size:12px;color:var(--muted)}
+.srow{display:grid;grid-template-columns:minmax(0,1.4fr) 70px minmax(0,1fr) 42px;gap:8px;align-items:center;padding:6px 0;border-top:1px solid rgba(128,128,128,.18);font-size:14px}.srow:first-child{border-top:0}
+.srow .bar2{height:8px;border-radius:4px;background:var(--bg);overflow:hidden}.srow .bar2 i{display:block;height:100%;background:var(--accent)}
+.srow .n{color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}.srow .pc{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.pmini{display:flex;align-items:center;gap:12px}.pmini .av{width:46px;height:46px;font-size:19px}.pmini b{display:block;font-size:17px}.pmini span{font-size:13px;color:var(--muted)}
+.prow{display:flex;gap:8px;margin-top:10px}.prow button{flex:1}
+#plist button{width:100%;margin-top:6px;text-align:left;background:var(--bg)}#plist button.on{outline:2px solid var(--accent)}
+.danger{width:100%;margin-top:10px;background:#5a1a1a!important;color:#ffd6d6}
+#pren,#pnew2,#pnm{flex:1;min-width:0;border:2px solid var(--bg);border-radius:8px;background:var(--bg);color:var(--text);padding:10px;font:16px "Trebuchet MS",sans-serif}
+.af{display:grid;gap:8px;margin-top:10px}.af input{border:2px solid var(--bg);border-radius:8px;background:var(--bg);color:var(--text);padding:10px;font:16px "Trebuchet MS",sans-serif;min-width:0}
+.lnk{background:none!important;padding:6px 0;color:var(--muted);text-decoration:underline;font-size:13px}.amsg{min-height:1em;margin:6px 0 0!important;color:var(--text)!important;font-weight:700;font-size:14px}
+#plist[hidden],.jr[hidden],#pdel[hidden],#pmail[hidden],#qf[hidden],#qc[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -290,11 +311,12 @@ body.blind #bldv{display:block;animation:hb 1.1s ease-in-out infinite}
   <div class="seg" id="thm"><button data-t="auto" class="on">Auto</button><button data-t="dark">Dark</button><button data-t="light">Light</button></div>
   </div>
   <div class="mcards">
-  <div class="card"><h2>Time control</h2><p>Each player gets this much time, like in tournaments.</p><div class="seg" id="tc"><button data-m="3">3 min</button><button data-m="5" class="on">5 min</button><button data-m="10">10 min</button></div></div>
+  <div class="card" id="pcard"></div>
+  <div class="card"><h2>Time control</h2><p>Minutes per player + seconds added after every move, like in tournaments.</p><div class="seg" id="tc"><button data-m="3" data-i="2">3 + 2</button><button data-m="5" data-i="3" class="on">5 + 3</button><button data-m="10" data-i="5">10 + 5</button><button data-m="15" data-i="10">15 + 10</button></div></div>
   <div class="card">
     <h2>Vs Computer</h2>
     <p>You play White.</p>
-    <div class="seg" id="lvl"><button data-l="1">Easy</button><button data-l="2" class="on">Medium</button><button data-l="3">Hard</button></div>
+    <div class="seg" id="lvl"><button data-l="1">Easy</button><button data-l="2" class="on">Medium</button><button data-l="3">Hard</button><button data-l="4" class="nm">Nightmare</button></div>
     <button class="big" id="vsai">Play</button>
   </div>
   <div class="card">
@@ -304,8 +326,9 @@ body.blind #bldv{display:block;animation:hb 1.1s ease-in-out infinite}
   </div>
   <div class="card">
     <h2>Play online</h2>
-    <p>Create a lobby and send the 6-digit code to a friend.</p>
-    <button class="big" id="mk">Create lobby</button>
+    <p>Find a random opponent with the same time control, or play a friend with a 6-digit code.</p>
+    <button class="big" id="qf">Find opponent</button><button id="qc" hidden style="width:100%">Cancel search</button>
+    <button id="mk" style="width:100%;margin-top:8px">Create lobby for a friend</button>
     <div class="jr"><input id="jc" inputmode="numeric" maxlength="6" placeholder="Enter code" autocomplete="off"><button id="jn">Join</button></div>
     <p id="nst" style="margin:10px 0 0"></p>
   </div>
@@ -317,6 +340,16 @@ body.blind #bldv{display:block;animation:hb 1.1s ease-in-out infinite}
   <div class="cards"><button class="cd"><div class="in"><div class="fr">?</div><div class="bk"></div></div></button><button class="cd"><div class="in"><div class="fr">?</div><div class="bk"></div></div></button><button class="cd"><div class="in"><div class="fr">?</div><div class="bk"></div></div></button></div>
   <button class="big" id="pnext" hidden></button>
 </section>
+<section id="prof" hidden>
+  <div class="bar"><button id="pback">Back</button></div>
+  <div class="phead"><label class="avw" title="Change photo"><div class="av" id="pav"></div><span class="avcam">Edit</span><input type="file" id="pfile" accept="image/*" hidden></label><div><h1 id="pname"></h1><p class="sub" id="psince"></p><button id="prmph" hidden>Remove photo</button></div></div>
+  <div class="tiles" id="ptiles"></div>
+  <div class="card"><h2>Stands</h2><div id="pstands"></div></div>
+  <div class="card"><h2>Vs computer</h2><div id="pai"></div></div>
+  <div class="card"><h2>Account</h2><div class="jr"><input id="pren" maxlength="20" placeholder="New name" autocomplete="off"><button id="prenb">Rename</button></div>
+   <p id="pmail" class="sub" hidden></p><div id="plist"></div><div class="jr"><input id="pnew2" maxlength="20" placeholder="New account name" autocomplete="off"><button id="pnewb2">Create</button></div>
+   <button id="pdel" class="danger">Delete this account</button></div>
+</section>
 <section id="game" hidden>
   <div class="bar"><button id="back">Menu</button><button id="again">New game</button><button id="rs">Resign</button></div>
   <div id="status"></div>
@@ -327,9 +360,9 @@ body.blind #bldv{display:block;animation:hb 1.1s ease-in-out infinite}
   <div class="stands st"><button id="ab" hidden></button><button id="kn" hidden>Knives</button><button id="fin" hidden>End</button></div>
 </section>
 </main>
+<div id="rsc" hidden><div class="card"><h2>Resign this game?</h2><p>You will lose the game.</p><div class="row2"><button id="rsn">Keep playing</button><button id="rsy">Resign</button></div></div></div>
 <div id="over" hidden><div class="card"><h2 id="overT"></h2><button class="big" id="overNew">Play again</button><button id="overMenu" style="width:100%">Menu</button></div></div>
 <div id="smm" hidden><div class="card"><h2>Scary Monsters</h2><p>Choose your dinosaur</p><div id="smb"></div></div></div><div id="pm" hidden><div class="card"><h2>Promote to</h2><div id="pmb"></div></div></div><div id="bldv"></div><div id="md"></div><div id="glow"></div><div id="rqm" hidden><div class="card"><h2>Requiem</h2><p>Choose which of your opponent’s pieces vanish</p><div id="rqb"></div></div></div><div id="cut" hidden></div>
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 const G={P:"♟\uFE0E",N:"♞\uFE0E",B:"♝\uFE0E",R:"♜\uFE0E",Q:"♛\uFE0E",K:"♚\uFE0E"};
 const ND=[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]],KD=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]],RD=[[-1,0],[1,0],[0,-1],[0,1]],BD=[[-1,-1],[-1,1],[1,-1],[1,1]];
@@ -633,17 +666,17 @@ function render(){const chk=inChk(S);
  const bs=blindShown();$("wrap").classList.toggle("blind",bs);document.body.classList.toggle("blind",bs);
  $("status").textContent=bs?"Blinded by blood! You can barely see…":SMSEL?(SMSEL.k=="D"?"Scary Monsters: tap one of your pawns":"Scary Monsters: tap the queen to evolve"):X?xs():over?"Game over":busy?(RQB?"Requiem…":HYB?"Hey Ya is cheering…":"Computer is thinking…"):HINT&&HINT.c==S.turn?"Hey Ya: play the green move!"+(HYN&&HYN.c==S.turn?" ("+HYN.left+" more after this)":""):(chk?"Check! ":"")+w+" to move";sui()}
 function tap(i){if(over||busy||PRM||!myTurn())return;if(SMSEL){const pc=S.b[i];if(pc==SMSEL.pl+(SMSEL.k=="D"?"P":"Q"))smDo(SMSEL.pl,i,SMSEL.k,true);else{SMSEL=null;render()}return}if(X){send({t:"xt",i});xtap(i);return}
- const m=cur.find(x=>x.to==i);if(m){if(m.promo){askPromo(m);return}send({t:"mv",m,tm:TM});play(m);return}
+ let m=cur.find(x=>x.to==i);if(!m&&sel!=null&&S.b[sel]==S.turn+"K"&&S.b[i]==S.turn+"R")m=cur.find(x=>x.cs&&(x.cs=="K")==((i&7)==7));if(m){if(m.promo){askPromo(m);return}send({t:"mv",m,tm:TM});play(m);return}
  const p=S.b[i];if(p&&p[0]==S.turn){sel=i;cur=legalAt(S,i)}else{sel=null;cur=[]}render()}
-function play(m){HINT=null;SMSEL=null;if(BLIND&&S.turn==BLIND)BLIND=null;const cp=S.b[m.to]||m.ep;HIST.push({t:Date.now(),c:S.turn,m,S0:S,pl:POS.length,clk:{w:TM.w,b:TM.b},sm:JSON.parse(JSON.stringify(SMS))});noteCap(S.turn,m.ep?opp(S.turn)+"P":S.b[m.to]);S=apply(S,m);notePos();last=m;sel=null;cur=[];sfx(cp?"cap":"mv");fin()}
+function play(m){HINT=null;SMSEL=null;if(BLIND&&S.turn==BLIND)BLIND=null;const cp=S.b[m.to]||m.ep;HIST.push({t:Date.now(),c:S.turn,m,S0:S,pl:POS.length,clk:{w:TM.w,b:TM.b},sm:JSON.parse(JSON.stringify(SMS))});noteCap(S.turn,m.ep?opp(S.turn)+"P":S.b[m.to]);S=apply(S,m);notePos();if(gameOn&&tcInc)TM[opp(S.turn)]+=tcInc*1000;last=m;sel=null;cur=[];sfx(cp?"cap":"mv");fin()}
 function fin(){const ms=legal(S);if(ms.length&&inChk(S))setTimeout(()=>sfx("chk"),130);
- if(!ms.length){over=true;keep=null;render();const c=inChk(S);setTimeout(()=>end(c?"Checkmate! "+(S.turn=="w"?"Black":"White")+" wins":"Stalemate — draw"),500);return}
- const dm=drawCheck();if(dm){over=true;keep=null;render();setTimeout(()=>end(dm),500);return}
+ if(!ms.length){over=true;keep=null;render();const c=inChk(S);result(c?opp(S.turn):null);setTimeout(()=>end(c?"Checkmate! "+(S.turn=="w"?"Black":"White")+" wins":"Stalemate — draw"),500);return}
+ const dm=drawCheck();if(dm){over=true;keep=null;result(null);render();setTimeout(()=>end(dm),500);return}
  if(FQ){if(S.turn==FQ.c&&FQ.q.length){const mv=FQ.q.shift(),l0=legal(S).find(x=>x.from==mv.from&&x.to==mv.to),lm=l0&&Object.assign({},l0,{pr:mv.pr});if(lm){const tok=aiTok;busy=true;render();setTimeout(()=>{if(tok!=aiTok)return;busy=false;play(lm)},750);return}FQ=null}else if(!FQ.q.length)FQ=null}
  if(HYN&&S.turn==HYN.c&&!X){const c=HYN.c;render();setTimeout(()=>{if(HYN&&S.turn==c&&!over&&!busy&&!X)heyYa(c,mode=="ai"&&c=="b",true)},350);return}
- if(mode=="ai"&&S.turn=="b"){busy=true;render();setTimeout(()=>{busy=false;if(BLIND=="b"){play(dumbMove(S));return}if(!(ST.b&&S.ply>=CD.b&&aiUse()))play(aiMove(S,lvl))},BLIND=="b"?900:80)}else render()}
+ if(mode=="ai"&&S.turn=="b"){busy=true;render();setTimeout(()=>{busy=false;if(BLIND=="b"){play(dumbMove(S));return}if(!(ST.b&&S.ply>=CD.b&&aiUse()))aiPlay()},BLIND=="b"?900:80)}else render()}
 function end(t){sfx("end");$("overNew").hidden=mode=="net";$("overT").textContent=t;$("over").hidden=false}
-let keep=null,aiTok=0,KN=[],KU=4,pr=0,RQP,RQB=false,RQU={w:false,b:false},HIST=[],FQ=null,MDB=false,TM={w:3e5,b:3e5},LT=0,gameOn=false,tcMin=5,FL=false,ME="w",BC="w",NET={},POS=[],PRM=null,BLIND=null,SMS={w:{p:0,q:0,used:0,evo:0},b:{p:0,q:0,used:0,evo:0}},SMSEL=null;
+let keep=null,aiTok=0,KN=[],KU=4,pr=0,RQP,RQB=false,RQU={w:false,b:false},HIST=[],FQ=null,MDB=false,TM={w:3e5,b:3e5},LT=0,gameOn=false,tcMin=5,tcInc=3,RECD=false,FL=false,ME="w",BC="w",NET={},POS=[],PRM=null,BLIND=null,SMS={w:{p:0,q:0,used:0,evo:0},b:{p:0,q:0,used:0,evo:0}},SMSEL=null;
 let AC;
 let SFXO=null,NZB=null;
 function sfx(k){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state=="suspended")AC.resume();const n=AC.currentTime;
@@ -667,7 +700,7 @@ const SRC={};function stopSnd(n){try{const s=SRC[n];if(s){s.stop?s.stop():s.paus
 function snd(n){try{if(!AU[n])return false;if(AB[n]){if(AC.state=="suspended")AC.resume();const s=AC.createBufferSource();s.buffer=AB[n];s.connect(AC.destination);s.start();SRC[n]=s;return true}const a=new Audio(AU[n]);a.play();SRC[n]=a;return true}catch(e){return false}}
 function prime(){if(pr)return;pr=1;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume();Object.keys(AU).forEach(k=>{const s=atob(AU[k].split(",")[1]),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);AC.decodeAudioData(u.buffer,b=>{AB[k]=b},()=>{})})}catch(e){}}
 function killX(){aiTok++;BLIND=null;HINT=null;HYB=false;HYN=null;stopSnd("hy");if(X){clearInterval(tm);X=null}RQB=false;FQ=null;MDB=false;$("md").className="";$("cut").hidden=true;$("rqm").hidden=true;fx(0);gray(0);space(0);clrK()}
-function start(){killX();$("top").dataset.l=mode=="net"?"Opponent":"Black";document.querySelector(".st").dataset.l=mode=="net"?"You":"White";$("top").hidden=mode!="two";S=init();POS=[key(S)];PRM=null;$("pm").hidden=true;TM={w:tcMin*6e4,b:tcMin*6e4};HIST=[];FQ=null;MDB=false;gameOn=false;RQU={w:false,b:false};SMS={w:{p:0,q:0,used:0,evo:0},b:{p:0,q:0,used:0,evo:0}};SMSEL=null;$("smm").hidden=true;BC=mode=="net"?ME:"w";FL=mode=="net"&&ME=="b";NET.sent=0;$("nw").textContent=mode=="net"?"You":"White";$("nb").textContent=mode=="ai"?"Computer":mode=="net"?"Opponent":"Black";$("pnb").className=mode=="two"?"pn rot":"pn";$("again").hidden=mode=="net";clk();sel=null;cur=[];last=null;over=false;busy=false;ST={w:null,b:null};CD={w:10,b:10};$("over").hidden=true;$("menu").hidden=true;$("game").hidden=true;if(keep&&keep.mode==mode&&mode!="net"){ST=keep.ST;pq=[]}else pq=mode=="net"?[ME]:mode=="ai"?["w"]:["w","b"];pick()}
+function start(){killX();RECD=false;$("top").dataset.l=mode=="net"?"Opponent":"Black";document.querySelector(".st").dataset.l=mode=="net"?"You":"White";$("top").hidden=mode!="two";S=init();POS=[key(S)];PRM=null;$("pm").hidden=true;TM={w:tcMin*6e4,b:tcMin*6e4};HIST=[];FQ=null;MDB=false;gameOn=false;RQU={w:false,b:false};SMS={w:{p:0,q:0,used:0,evo:0},b:{p:0,q:0,used:0,evo:0}};SMSEL=null;$("smm").hidden=true;BC=mode=="net"?ME:"w";FL=mode=="net"&&ME=="b";NET.sent=0;$("nw").textContent=mode=="net"?"You":"White";$("nb").textContent=mode=="ai"?"Computer":mode=="net"?(NET.oname||"Opponent"):"Black";$("pnb").className=mode=="two"?"pn rot":"pn";$("again").hidden=mode=="net";clk();sel=null;cur=[];last=null;over=false;busy=false;ST={w:null,b:null};CD={w:10,b:10};$("over").hidden=true;$("menu").hidden=true;$("game").hidden=true;if(keep&&keep.mode==mode&&mode!="net"){ST=keep.ST;pq=[]}else pq=mode=="net"?[ME]:mode=="ai"?["w"]:["w","b"];pick()}
 function netWait(t){$("pick").hidden=false;$("pwho").textContent=t;document.querySelectorAll(".cd").forEach(c=>c.hidden=true);$("pnext").hidden=true}
 function pick(){if(mode=="net"&&pq.length&&ME=="b"&&!ST.w){netWait("Waiting for the host to pick…");return}
  if(!pq.length){if(mode=="net"){if(ST[ME]&&!NET.sent){NET.sent=1;send({t:"st",c:ME,s:ST[ME]})}if(!ST.w||!ST.b){netWait("Waiting for your opponent…");return}}if(mode=="ai"&&!ST.b)ST.b=pickStand(ST.w);CD={w:IC[ST.w],b:IC[ST.b]};gameOn=true;LT=Date.now();keep={mode,ST};$("pick").hidden=true;$("game").hidden=false;render();return}
@@ -860,9 +893,9 @@ function rewind(P,i0,tok){const o=opp(P);
  let k=0;const st=()=>{if(tok!==undefined&&tok!=aiTok)return;if(k>=steps.length){done();return}const e=steps[k++];S=Object.assign({},e.S0,{b:e.S0.b.slice()});HIDE=e.m.from;last=null;render();sfx("mv");mdGhost(e.m.to,e.m.from,e.S0.b[e.m.from],dt);setTimeout(()=>{HIDE=-1;render();st()},dt)};st()}
 function fmt(ms){ms=Math.max(0,ms);if(ms<10000)return(ms/1000).toFixed(1);const s=Math.ceil(ms/1000);return(s/60|0)+":"+String(s%60).padStart(2,"0")}
 function clk(){$("cw").textContent=fmt(TM[BC]);$("cb").textContent=fmt(TM[opp(BC)]);const on=!!(S&&gameOn&&!over);$("pnw").classList.toggle("act",on&&S.turn==BC);$("pnb").classList.toggle("act",on&&S.turn!=BC)}
-function tick(){const n=Date.now(),dt=n-LT;LT=n;if(!gameOn||over||!S||$("game").hidden||X||RQB||MDB||HYB){clk();return}
+function tick(){const n=Date.now(),dt=n-LT;LT=n;if(gameOn&&!over&&S&&!$("game").hidden&&dt<2000)addTime(dt);if(!gameOn||over||!S||$("game").hidden||X||RQB||MDB||HYB){clk();return}
  TM[S.turn]-=dt;if(TM[S.turn]<=0){send({t:"to"});tmo();return}clk()}
-function tmo(){TM[S.turn]=0;over=true;keep=null;clk();sfx("end");const w=S.turn,ok=sufMat(S.b,opp(w));setTimeout(()=>end(ok?"Time out! "+(w=="w"?"Black":"White")+" wins":"Time out, but "+(w=="w"?"Black":"White")+" cannot mate. Draw"),400)}
+function tmo(){TM[S.turn]=0;over=true;keep=null;clk();sfx("end");const w=S.turn,ok=sufMat(S.b,opp(w));result(ok?opp(w):null);setTimeout(()=>end(ok?"Time out! "+(w=="w"?"Black":"White")+" wins":"Time out, but "+(w=="w"?"Black":"White")+" cannot mate. Draw"),400)}
 setInterval(tick,100);
 function key(s){return s.b.map(q=>q||".").join("")+s.turn+(s.rights.wK|0)+(s.rights.wQ|0)+(s.rights.bK|0)+(s.rights.bQ|0)+s.ep}
 function notePos(){POS.push(key(S))}
@@ -877,39 +910,87 @@ function rqSel(b,o,t){const idx=[];b.forEach((q,i)=>{if(q==o+t)idx.push(i)});con
  return idx.sort((x,y)=>sc(x)-sc(y)).slice(0,k)}
 function askPromo(m){PRM=m;$("pmb").innerHTML=["Q","R","B","N"].map(t=>`<button data-t="${t}">${G[t]}</button>`).join("");$("pm").hidden=false}
 $("pm").onclick=e=>{const t=e.target.dataset&&e.target.dataset.t;if(!t||!PRM)return;const m=Object.assign({},PRM,{pr:t});PRM=null;$("pm").hidden=true;send({t:"mv",m,tm:TM});play(m)};
-function resign(w){if(over)return;over=true;keep=null;render();sfx("end");setTimeout(()=>end((w=="w"?"White":"Black")+" resigned. "+(w=="w"?"Black":"White")+" wins"),300)}
-$("rs").onclick=()=>{if(over||!gameOn)return;const w=mode=="net"?ME:mode=="ai"?"w":S.turn;if(mode=="net")send({t:"rs"});resign(w)};
-const ICE={config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:global.stun.twilio.com:3478"},{urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},{urls:"turns:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}]}};
-function send(o){try{if(mode=="net"&&NET.conn&&NET.conn.open)NET.conn.send(o)}catch(e){}}
-function netClose(){NET.closing=1;try{NET.conn&&NET.conn.close();NET.peer&&NET.peer.destroy()}catch(e){}NET={};$("nst").textContent=""}
+function resign(w){if(over)return;over=true;keep=null;result(opp(w));render();sfx("end");setTimeout(()=>end((w=="w"?"White":"Black")+" resigned. "+(w=="w"?"Black":"White")+" wins"),300)}
+$("rs").onclick=()=>{if(over||!gameOn)return;$("rsc").hidden=false};$("rsn").onclick=()=>{$("rsc").hidden=true};
+$("rsy").onclick=()=>{$("rsc").hidden=true;if(over||!gameOn)return;const w=mode=="net"?ME:mode=="ai"?"w":S.turn;if(mode=="net")send({t:"rs"});resign(w)};
+// ===== Firebase: accounts + online play
+const FBC={apiKey:"AIzaSyAsg7b3aaeHlR7FqKfA2OkFbprIOn4Mqb4",authDomain:"jojo-chess-65340.firebaseapp.com",projectId:"jojo-chess-65340",storageBucket:"jojo-chess-65340.firebasestorage.app",messagingSenderId:"891144790692",appId:"1:891144790692:web:94d6f97672f0714fe0bc31"};
+let FB=null,FU=null,CLOUD=null,CST=0,FBTRY=false,PENDN="";
+async function fbInit(){FBTRY=true;try{let m;if(window.__FBMOCK)m=window.__FBMOCK;else{const u="https://www.gstatic.com/firebasejs/10.12.2/";const r=await Promise.all([import(u+"firebase-app.js"),import(u+"firebase-auth.js"),import(u+"firebase-firestore.js")]);m=Object.assign({},...r)}
+ const app=m.initializeApp(FBC);FB={m,auth:m.getAuth(app),db:m.getFirestore(app)};if(m.getRedirectResult)m.getRedirectResult(FB.auth).catch(e=>authMsg(e));
+ m.onAuthStateChanged(FB.auth,u=>onUser(u).catch(e=>authMsg(e)))}catch(e){FB=null}pcard();onlineHint()}
+async function onUser(u){FU=u||null;if(!u){CLOUD=null;pcard();onlineHint();return}const m=FB.m,ref=m.doc(FB.db,"users",u.uid);let d=null;try{const s=await m.getDoc(ref);d=s.exists()?s.data():null}catch(e){authMsg(e)}
+ if(!d){const loc=PROF.cur&&PROF.list[PROF.cur];d={name:(PENDN||u.displayName||(u.email||"Player").split("@")[0]).slice(0,20),photo:loc&&loc.photo||null,created:Date.now(),hue:Math.random()*360|0,stats:loc?JSON.parse(JSON.stringify(loc.stats)):newStats()};CLOUD=d;cloudSave(true)}
+ else{CLOUD=d;if(!CLOUD.stats)CLOUD.stats=newStats()}pcard();onlineHint();if(!$("prof").hidden)openProf()}
+function cloudSave(now){if(!FB||!FU||!CLOUD)return;clearTimeout(CST);const go=()=>FB.m.setDoc(FB.m.doc(FB.db,"users",FU.uid),JSON.parse(JSON.stringify(CLOUD))).catch(e=>console.warn(e));if(now)go();else CST=setTimeout(go,1500)}
+function authMsg(e){const c=e&&e.code||"",t={"auth/invalid-credential":"Wrong email or password.","auth/wrong-password":"Wrong email or password.","auth/user-not-found":"No account with this email.","auth/email-already-in-use":"This email already has an account. Sign in instead.","auth/weak-password":"Password must be at least 6 characters.","auth/invalid-email":"That email doesn’t look right.","auth/popup-closed-by-user":"Sign-in window was closed.","auth/unauthorized-domain":"This site isn’t allowed yet: add it under Authentication → Settings → Authorized domains.","auth/network-request-failed":"No internet connection.","permission-denied":"The database refused access: check the Firestore rules."}[c];
+ const el=$("amsg");if(el)el.textContent=t||("Sign-in problem: "+(c||e&&e.message||e))}
+const myName=()=>(curP()&&curP().name)||"Player";
+// ----- auth UI hooks (called from pcard)
+function authUI(c){c.innerHTML=`<h2>Your account</h2><p>Sign in to keep your stats, photo and online games on every device.</p>
+ <button class="big" id="ag">Continue with Google</button>
+ <div class="af"><input id="ae" type="email" placeholder="Email" autocomplete="email"><input id="ap" type="password" placeholder="Password (6+ characters)" autocomplete="current-password"><input id="an" placeholder="Name (for new accounts)" maxlength="20" autocomplete="nickname"></div>
+ <div class="prow"><button id="ai">Sign in</button><button id="au">Create account</button></div><button id="ar" class="lnk">Forgot password?</button><p id="amsg" class="amsg"></p>`;
+ const m=FB.m;$("ag").onclick=async()=>{$("amsg").textContent="";const pv=new m.GoogleAuthProvider();try{await m.signInWithPopup(FB.auth,pv)}catch(e){if(e.code=="auth/popup-blocked"||e.code=="auth/operation-not-supported-in-this-environment"){try{await m.signInWithRedirect(FB.auth,pv)}catch(x){authMsg(x)}}else authMsg(e)}};
+ const em=()=>$("ae").value.trim(),pw=()=>$("ap").value;
+ $("ai").onclick=async()=>{$("amsg").textContent="Signing in…";try{await m.signInWithEmailAndPassword(FB.auth,em(),pw())}catch(e){authMsg(e)}};
+ $("au").onclick=async()=>{$("amsg").textContent="Creating account…";PENDN=$("an").value.trim();try{const r=await m.createUserWithEmailAndPassword(FB.auth,em(),pw());const n=$("an").value.trim();if(n&&m.updateProfile){await m.updateProfile(r.user,{displayName:n});if(CLOUD){CLOUD.name=n.slice(0,20);cloudSave(true);pcard()}}}catch(e){authMsg(e)}};
+ $("ar").onclick=async()=>{if(!em()){$("amsg").textContent="Type your email first.";return}try{await m.sendPasswordResetEmail(FB.auth,em());$("amsg").textContent="Password reset email sent."}catch(e){authMsg(e)}}}
+// ----- online transport over Firestore
+NET={un:[]};
+function send(o){if(mode!="net"||!NET.gid||!FB||!FU)return;try{const m=FB.m;m.addDoc(m.collection(FB.db,"games",NET.gid,"m"),{u:FU.uid,n:++NET.seq,ts:Date.now(),d:JSON.parse(JSON.stringify(o))}).catch(e=>nst("Connection problem: "+(e.code||e.message)))}catch(e){}}
+function listenGame(gid,color){const m=FB.m;NET.gid=gid;NET.color=color;NET.seq=NET.seq||0;NET.seen=new Set();NET.ohb=Date.now();
+ NET.un.push(m.onSnapshot(m.query(m.collection(FB.db,"games",gid,"m"),m.orderBy("ts")),snap=>{const arr=[];snap.docChanges().forEach(ch=>{if(ch.type=="added"&&!NET.seen.has(ch.doc.id)){NET.seen.add(ch.doc.id);const v=ch.doc.data();if(v.u!=FU.uid)arr.push(v)}});arr.sort((a,b)=>a.n-b.n);arr.forEach(v=>{NET.ohb=Date.now();onNet(v.d)})},e=>nst("Connection problem: "+(e.code||e.message))));
+ const g=m.doc(FB.db,"games",gid),oc=color=="w"?"b":"w";
+ NET.un.push(m.onSnapshot(g,s=>{const v=s.data();if(v&&v["hb_"+oc])NET.ohb=Math.max(NET.ohb,v["hb_"+oc])}));
+ const beat=()=>m.updateDoc(g,{["hb_"+color]:Date.now()}).catch(()=>{});beat();NET.t1=setInterval(beat,8000);
+ NET.t2=setInterval(()=>{if(mode=="net"&&gameOn&&!over&&Date.now()-NET.ohb>45000)oppGone()},5000)}
+function oppGone(){if(over)return;over=true;result(ME);gameOn=false;killX();render();end("Opponent left the game")}
+function netClose(){const m=FB&&FB.m;if(mode=="net"&&NET.gid&&gameOn&&!over)send({t:"bye"});NET.cancel=1;(NET.un||[]).forEach(f=>{try{f()}catch(e){}});clearInterval(NET.t1);clearInterval(NET.t2);clearInterval(NET.t3);
+ if(m&&NET.qref)m.deleteDoc(NET.qref).catch(()=>{});if(m&&NET.room)m.deleteDoc(NET.room).catch(()=>{});NET={un:[]};setQ(false);const s=$("nst");if(s)s.textContent=""}
 function nst(t){$("nst").textContent=t}
-function lobbyErr(){nst("The online engine did not load. Online play does not work inside Claude; on your own site, check your internet connection.")}
+function onlineHint(){const s=$("nst");if(!s||NET.gid||NET.qref||NET.room)return;s.textContent=!FB?(FBTRY?"Online play works only on your own website (not inside Claude) and needs internet.":""):!FU?"Sign in (account card above) to play online.":""}
+function needIn(){if(!FB){onlineHint();return false}if(!FU){nst("Sign in first (account card above) to play online.");return false}return true}
+function setQ(on){const f=$("qf"),c=$("qc");if(f)f.hidden=on;if(c)c.hidden=!on}
+function hostStart(gid){NET.room&&FB.m.deleteDoc(NET.room).catch(()=>{});NET.room=null;listenGame(gid,"w");mode="net";ME="w";send({t:"hi",n:myName()});send({t:"cfg",tc:tcMin,inc:tcInc});setQ(false);start()}
+function joinAs(gid){mode="net";ME="b";listenGame(gid,"b");send({t:"hi",n:myName()});setQ(false);nst("Connected. Waiting for the host…")}
+const newGid=()=>FU.uid.slice(0,6)+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+async function claim(c){const m=FB.m,db=FB.db,gid=newGid();let ok=false;
+ await m.runTransaction(db,async tx=>{const ref=m.doc(db,"queue",c.id),s=await tx.get(ref);if(!s.exists()||s.data().gid)return;tx.update(ref,{gid,opp:FU.uid});tx.set(m.doc(db,"games",gid),{w:c.id,b:FU.uid,tc:c.tc,inc:c.inc,created:Date.now()});ok=true});return ok?gid:null}
+async function scanQueue(myTs){const m=FB.m,db=FB.db,k=tcMin+"+"+tcInc,me=FU.uid;
+ const qs=await m.getDocs(m.query(m.collection(db,"queue"),m.where("k","==",k),m.limit(20)));
+ const cs=qs.docs.map(d=>Object.assign({id:d.id},d.data())).filter(c=>c.id!=me&&!c.gid&&Date.now()-c.ts<90000&&(!myTs||c.t0<myTs||(c.t0==myTs&&c.id<me))).sort((a,b)=>a.t0-b.t0);
+ for(const c of cs){if(NET.cancel)return true;const gid=await claim(c);if(gid){if(NET.qref){m.deleteDoc(NET.qref).catch(()=>{});NET.qref=null}clearInterval(NET.t3);tcMin=c.tc;tcInc=c.inc;nst("Opponent found: "+(c.name||"Player")+". Starting…");joinAs(gid);return true}}return false}
+async function findMatch(){if(!needIn())return;netClose();NET.cancel=0;setQ(true);nst("Looking for an opponent ("+tcMin+" + "+tcInc+")…");const m=FB.m,db=FB.db,me=FU.uid;
+ try{if(await scanQueue(0))return;if(NET.cancel)return;const t0=Date.now(),ref=m.doc(db,"queue",me);await m.setDoc(ref,{k:tcMin+"+"+tcInc,tc:tcMin,inc:tcInc,t0,ts:t0,gid:null,name:myName()});NET.qref=ref;
+  NET.un.push(m.onSnapshot(ref,s=>{const v=s.data();if(v&&v.gid&&!NET.gid){clearInterval(NET.t3);m.deleteDoc(ref).catch(()=>{});NET.qref=null;nst("Opponent found! Starting…");hostStart(v.gid)}}));
+  let n=0;NET.t3=setInterval(async()=>{if(NET.gid||NET.cancel)return;n++;m.updateDoc(ref,{ts:Date.now()}).catch(()=>{});try{await scanQueue(t0)}catch(e){}if(!NET.gid)nst("Looking for an opponent… "+(n*5)+" s")},5000)}
+ catch(e){nst("Matchmaking problem: "+(e.code||e.message));setQ(false)}}
+async function makeRoom(){if(!needIn())return;netClose();NET.cancel=0;const m=FB.m,db=FB.db;nst("Creating lobby…");
+ try{for(let tr=0;tr<6;tr++){const code=String(Math.floor(Math.random()*9e5)+1e5),gid=newGid(),rref=m.doc(db,"rooms",code);let ok=false;
+   await m.runTransaction(db,async tx=>{const s=await tx.get(rref);if(s.exists()&&Date.now()-s.data().ts<3600e3)return;tx.set(rref,{host:FU.uid,gid,ts:Date.now(),tc:tcMin,inc:tcInc,name:myName()});tx.set(m.doc(db,"games",gid),{w:FU.uid,b:null,tc:tcMin,inc:tcInc,created:Date.now()});ok=true});
+   if(!ok)continue;NET.room=rref;nst("Your code: "+code+" — waiting for a friend…");
+   NET.un.push(m.onSnapshot(m.doc(db,"games",gid),s=>{const v=s.data();if(v&&v.b&&!NET.gid)hostStart(gid)}));return}
+  nst("Could not create a lobby, try again.")}catch(e){nst("Lobby problem: "+(e.code||e.message))}}
+async function joinRoom(){const code=$("jc").value.replace(/\D/g,"");if(code.length!=6){nst("Enter the 6-digit code.");return}if(!needIn())return;netClose();NET.cancel=0;const m=FB.m,db=FB.db;nst("Joining…");
+ try{const s=await m.getDoc(m.doc(db,"rooms",code));if(!s.exists()||Date.now()-s.data().ts>3600e3){nst("Lobby not found. Check the code.");return}const r=s.data();if(r.host==FU.uid){nst("That’s your own lobby. Send the code to a friend.");return}
+  let ok=false;await m.runTransaction(db,async tx=>{const gref=m.doc(db,"games",r.gid),g=await tx.get(gref);if(!g.exists()||g.data().b)return;tx.update(gref,{b:FU.uid});ok=true});
+  if(!ok){nst("This lobby is already full.");return}tcMin=r.tc;tcInc=r.inc;joinAs(r.gid)}catch(e){nst("Lobby problem: "+(e.code||e.message))}}
+
 function mdUse(pl){const i0=HIST.findIndex(e=>e.t>=Date.now()-6000);send({t:"md",i0});mandomRun(pl,i0)}
-function onConn(c){NET.conn=c;c.on("data",onNet);c.on("error",e=>nst("Connection error: "+(e.type||e)));c.on("close",()=>{if(!NET.closing&&mode=="net"&&!over){over=true;gameOn=false;render();end("Opponent disconnected")}})}
 function onNet(d){if(!d||!d.t)return;if(d.tm)TM=d.tm;
- switch(d.t){case"cfg":tcMin=d.tc;mode="net";ME="b";start();break;
+ switch(d.t){case"cfg":tcMin=d.tc;tcInc=d.inc||0;mode="net";ME="b";start();break;
  case"st":if(d.c==ME)break;ST[d.c]=d.s;if(ME=="b"||!pq.length)pick();break;
  case"mv":play(d.m);break;
  case"xs":startX(d.c,true);break;case"xt":if(X)xtap(d.i);break;case"xk":if(X){X.kn=!X.kn;xr()}break;case"kb":kcBlood();break;case"sm":smDo(d.c,d.i,d.k,false);break;case"xe":xend();break;
  case"rqo":busy=true;RQB=true;glow();render();break;case"rqc":busy=false;RQB=false;render();break;case"rq":rqRun(opp(ME),d.tp);break;
- case"md":mandomRun(opp(ME),d.i0);break;case"to":tmo();break;case"hy":CD[d.c]=S.ply+10;hyFx(HYO,d.c,"Opponent’s Hey Ya");render();break;case"rs":resign(opp(ME));break}}
-nst(window.Peer?"":"Online play works only on your own website, not inside Claude.");
-$("mk").onclick=()=>{netClose();if(!window.Peer){lobbyErr();return}nst("Creating lobby…");let tries=0;
- const make=()=>{const code=String(Math.floor(Math.random()*9e5)+1e5),p=new Peer("jjc-"+code,ICE);NET.peer=p;
-  const to=setTimeout(()=>{if(!NET.code)nst("Could not reach the server. Check your connection and try again.")},10000);p.on("open",()=>{NET.code=code;clearTimeout(to);nst("Your code: "+code+" — waiting for a friend…")});
-  p.on("error",e=>{if(e.type=="unavailable-id"&&tries++<5){p.destroy();make()}else nst("Lobby error: "+(e.type||"unknown")+" "+(e.message||""))});
-  p.on("connection",c=>{if(NET.conn){c.close();return}onConn(c);c.on("open",()=>{mode="net";ME="w";send({t:"cfg",tc:tcMin});start()})})};
- make()};
-$("jn").onclick=()=>{const code=$("jc").value.replace(/\D/g,"");if(code.length!=6){nst("Enter the 6-digit code.");return}netClose();if(!window.Peer){lobbyErr();return}
- const p=new Peer(undefined,ICE);NET.peer=p;nst("Connecting…");
- const to=setTimeout(()=>{if(!NET.conn||!NET.conn.open){nst("No answer from the lobby. Check the code, or try Wi-Fi: some mobile networks block direct connections.");netClose()}},9000);
- p.on("error",e=>{clearTimeout(to);nst(e.type=="peer-unavailable"?"Lobby not found. Check the code.":"Could not connect: "+(e.type||"")+" "+(e.message||""))});
- p.on("open",()=>{const c=p.connect("jjc-"+code,{reliable:true});onConn(c);c.on("open",()=>{clearTimeout(to);nst("Connected. Waiting for the host…")})})};
+ case"md":mandomRun(opp(ME),d.i0);break;case"to":tmo();break;case"hy":CD[d.c]=S.ply+10;hyFx(HYO,d.c,"Opponent’s Hey Ya");render();break;case"rs":resign(opp(ME));break;case"bye":oppGone();break;case"hi":NET.oname=String(d.n||"Opponent").slice(0,20);if(mode=="net"&&$("nb"))$("nb").textContent=NET.oname;break}}
+$("qf").onclick=findMatch;$("qc").onclick=()=>{netClose();onlineHint()};$("mk").onclick=makeRoom;$("jn").onclick=joinRoom;
 
 function setTheme(t){if(t=="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",t);[...$("thm").children].forEach(b=>b.classList.toggle("on",b.dataset.t==t));try{localStorage.setItem("jjtheme",t)}catch(e){}}
 $("thm").onclick=e=>{const t=e.target.dataset&&e.target.dataset.t;if(t)setTheme(t)};
 try{const t=localStorage.getItem("jjtheme");if(t)setTheme(t)}catch(e){}
-$("tc").onclick=e=>{const m=e.target.dataset&&e.target.dataset.m;if(!m)return;tcMin=+m;[...$("tc").children].forEach(b=>b.classList.toggle("on",b.dataset.m==m))};
+$("tc").onclick=e=>{const m=e.target.dataset&&e.target.dataset.m;if(!m)return;tcMin=+m;tcInc=+e.target.dataset.i;[...$("tc").children].forEach(b=>b.classList.toggle("on",b.dataset.m==m))};
 
 let HINT=null,HYB=false,HYR=0,HYN=null;
 function hyLoop(){cancelAnimationFrame(HYR);const f=()=>{if(!HINT)return;draw();HYR=requestAnimationFrame(f)};HYR=requestAnimationFrame(f)}
@@ -952,7 +1033,7 @@ function startX(pl,r){S.b=S.b.slice();X={k:ST[pl]=="twa"?"tw":ST[pl],au:ST[pl]==
  xr();if(X.k=="tw"){if(!snd(X.au?"dio":"zw"))sfx("zw");fx(1);gray(1)}else{if(!snd("kc"))sfx("kc");space(1);glitch()}}
 function aiUse(){const tok=++aiTok;
  if(ST.b=="sm"){let i=-1,k=null;if(smEvo("b")){i=S.b.indexOf("bQ");k="Z"}else if(smCh("b")>0){let best=-1e9;S.b.forEach((q,j)=>{if(q=="bP"){const sc=(j>>3)*10+KD.reduce((a,[dr,df])=>{const r=(j>>3)+dr,f=(j&7)+df;return a+(r>=0&&r<8&&f>=0&&f<8&&S.b[r*8+f]&&S.b[r*8+f][0]=="w"?15:0)},0)+Math.random();if(sc>best){best=sc;i=j}}});k="D"}
-  if(i<0)return false;smDo("b",i,k,false).then(()=>{if(tok==aiTok&&S.turn=="b"&&!over){busy=true;render();setTimeout(()=>{busy=false;play(aiMove(S,lvl))},300)}});return true}
+  if(i<0)return false;smDo("b",i,k,false).then(()=>{if(tok==aiTok&&S.turn=="b"&&!over){busy=true;render();setTimeout(()=>{busy=false;aiPlay()},300)}});return true}
  if(ST.b=="hy"){heyYa("b",true);return true}
  if(ST.b=="rq"){if(RQU.b)return false;const nb=bestNormal("b");let bt=null,bs=-1e9;
   for(const t of["P","N","B","R"]){const sel=rqSel(S.b,"w",t);if(!sel.length)continue;const sc=-nega({b:S.b.map((q,i)=>sel.includes(i)?null:q),turn:"w",rights:S.rights,ep:-1,ply:S.ply+1},1,-1e9,1e9);if(sc>bs){bs=sc;bt=t}}
@@ -971,9 +1052,47 @@ const abc=pl=>{if(S.turn!=pl||over||busy||X||!ST[pl]||S.ply<CD[pl]||(mode=="ai"&
 $("ab").onclick=()=>abc(BC);$("ab2").onclick=()=>abc(opp(BC));
 [$("kn"),$("kn2")].forEach((e,ix)=>e.onclick=()=>{if(!X){const pl=ix?opp(BC):BC;if(ST[pl]=="sm"&&S.turn==pl&&!busy&&!over&&!(mode=="ai"&&pl!="w"))smPick(pl,"Z");return}if(!X||(mode=="ai"&&X.c=="b")||(mode=="net"&&X.c!=ME))return;if(X.k=="kc"){send({t:"kb"});kcBlood();return}send({t:"xk"});X.kn=!X.kn;xr()});
 [$("fin"),$("fin2")].forEach(e=>e.onclick=()=>{if(!X||(mode=="ai"&&X.c=="b")||(mode=="net"&&X.c!=ME))return;send({t:"xe"});xend()});
-function menu(){if(mode=="net"){netClose();mode="ai"}killX();$("over").hidden=true;$("game").hidden=true;$("pick").hidden=true;$("menu").hidden=false}
+function menu(){$("prof").hidden=true;$("rsc").hidden=true;pcard();if(mode=="net"){netClose();mode="ai"}killX();$("over").hidden=true;$("game").hidden=true;$("pick").hidden=true;$("menu").hidden=false}
 $("vsai").onclick=()=>{mode="ai";start()};$("vs2").onclick=()=>{mode="two";start()};
 $("back").onclick=menu;$("overMenu").onclick=menu;$("again").onclick=start;$("overNew").onclick=start;
+
+function aiPlay(){if(lvl<3){play(aiMove(S,lvl));return}const tok=aiTok,s0=S,ms=legal(S);if(!ms.length){fin();return}busy=true;render();
+ bestAsync(S,ms,lvl==4?2600:400).then(m=>{if(tok!=aiTok||S!==s0)return;busy=false;play(m||aiMove(S,2))})}
+// ---------- accounts (stored on this device)
+let PROF={cur:null,list:{}},PSV=0;try{PROF=JSON.parse(localStorage.getItem("jjc_prof"))||PROF}catch(e){}
+function psave(){try{localStorage.setItem("jjc_prof",JSON.stringify(PROF))}catch(e){}if(CLOUD)cloudSave()}
+const curP=()=>CLOUD||(PROF.cur&&PROF.list[PROF.cur])||null;
+function newStats(){return{games:0,w:0,l:0,d:0,ms:0,stands:{},ai:{}}}
+function pCreate(name){name=(name||"").trim().slice(0,20);if(!name)return false;const id="p"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);PROF.list[id]={name,created:Date.now(),hue:Math.random()*360|0,stats:newStats()};PROF.cur=id;psave();return true}
+function addTime(dt){const p=curP();if(!p||mode=="two")return;p.stats.ms+=dt;if((PSV+=dt)>10000){PSV=0;psave()}}
+function result(winner){if(RECD)return;RECD=true;const p=curP();if(!p||mode=="two")return;const me=mode=="net"?ME:"w",r=winner==null?"d":winner==me?"w":"l",s=p.stats;
+ s.games++;s[r]++;const st=ST[me];if(st){const o=s.stands[st]||(s.stands[st]={g:0,w:0,l:0,d:0});o.g++;o[r]++}
+ if(mode=="ai"){const o=s.ai[lvl]||(s.ai[lvl]={g:0,w:0,l:0,d:0});o.g++;o[r]++}else{const o=s.net||(s.net={g:0,w:0,l:0,d:0});o.g++;o[r]++}psave()}
+const pct=(a,b)=>b?Math.round(a/b*100)+"%":"—",hm=ms=>{const m=Math.floor(ms/6e4);return m<60?m+" min":Math.floor(m/60)+" h "+(m%60)+" min"};
+function avatar(el,p){el.textContent="";el.style.background="";el.classList.toggle("ph",!!p.photo);if(p.photo){el.style.backgroundImage=`url(${p.photo})`}else{el.style.backgroundImage="";el.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 15.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Zm0-11.8c2.3 0 4 1.5 4 3.6 0 1.6-.9 2.5-2 3.2-.9.6-1.2.9-1.2 1.7v.5h-1.9v-.6c0-1.6.7-2.3 1.8-3 .9-.6 1.4-1 1.4-1.8 0-1-.9-1.7-2.1-1.7-1.3 0-2.1.8-2.2 2H7.9c.1-2.3 1.8-3.9 4.1-3.9Z"/></svg>'}}
+function pcard(){const c=$("pcard"),p=curP();c.innerHTML="";if(FB&&!FU){authUI(c);return}if(FU&&!CLOUD){c.innerHTML="<h2>Your account</h2><p>Loading your account…</p>";return}
+ if(!p){c.innerHTML='<h2>Your account</h2><p>Create an account to save wins, losses, time played and win rate for every stand.</p><div class="jr"><input id="pnm" maxlength="20" placeholder="Your name" autocomplete="off"><button id="pmk" class="big" style="width:auto;padding:10px 16px">Create</button></div>';
+  const go=()=>{if(pCreate($("pnm").value))pcard()};$("pmk").onclick=go;$("pnm").onkeydown=e=>{if(e.key=="Enter")go()};return}
+ const s=p.stats;c.innerHTML='<div class="pmini"><div class="av"></div><div><b></b><span></span></div></div><div class="prow"><button id="popen">Profile</button>'+(FU?'<button id="pout">Sign out</button>':'')+'</div>';if(FU)setTimeout(()=>{$("pout").onclick=()=>{netClose();FB.m.signOut(FB.auth)}});
+ avatar(c.querySelector(".av"),p);c.querySelector(".pmini b").textContent=p.name;c.querySelector(".pmini span").textContent=`${s.w} wins · ${s.l} losses · ${s.d} draws · ${pct(s.w,s.games)} win rate`;
+ $("popen").onclick=openProf}
+function openProf(){const p=curP();if(!p)return;const s=p.stats;$("menu").hidden=true;$("prof").hidden=false;scrollTo(0,0);
+ avatar($("pav"),p);$("pname").textContent=p.name;$("psince").textContent="Playing since "+new Date(p.created).toLocaleDateString();
+ $("ptiles").innerHTML=[["Games",s.games],["Wins",s.w],["Losses",s.l],["Draws",s.d],["Win rate",pct(s.w,s.games)],["Time played",hm(s.ms)]].map(([a,b])=>`<div class="tile"><b>${b}</b><span>${a}</span></div>`).join("");
+ const row=(name,o)=>{const g=o?o.g:0,w=o?o.w:0,r=g?Math.round(w/g*100):0;return `<div class="srow"><span>${name}</span><span class="n">${g} ${g==1?"game":"games"}</span><div class="bar2"><i style="width:${r}%"></i></div><span class="pc">${g?r+"%":"—"}</span></div>`};
+ $("pstands").innerHTML=POOL.map(k=>row(SD[k].n,s.stands[k])).join("");
+ $("pai").innerHTML=[["Easy",1],["Medium",2],["Hard",3],["Nightmare",4]].map(([n,l])=>row(n,s.ai[l])).join("")+row("Online",s.net);
+ $("plist").innerHTML="";for(const id in PROF.list){const b=document.createElement("button");b.textContent=PROF.list[id].name+(id==PROF.cur?" (current)":"");b.className=id==PROF.cur?"on":"";b.onclick=()=>{PROF.cur=id;psave();openProf()};$("plist").appendChild(b)}
+ $("pdel").textContent="Delete this account";$("pdel").dataset.arm="";const cl=!!CLOUD;$("plist").hidden=cl;$("pnew2").parentNode.hidden=cl;$("pdel").hidden=cl;$("pmail").hidden=!cl;$("pmail").textContent=cl&&FU?"Signed in as "+(FU.email||FU.displayName||"Google account")+" · saved online":"";$("prmph").hidden=!p.photo}
+$("pfile").onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(!f||!f.type.startsWith("image/"))return;const img=new Image(),url=URL.createObjectURL(f);
+ img.onload=()=>{const c=document.createElement("canvas"),z=192;c.width=c.height=z;const x=c.getContext("2d"),s=Math.min(img.width,img.height);x.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,z,z);URL.revokeObjectURL(url);
+  const p=curP();if(!p)return;p.photo=c.toDataURL("image/jpeg",.82);psave();openProf()};img.onerror=()=>URL.revokeObjectURL(url);img.src=url};
+$("prmph").onclick=()=>{const p=curP();if(p){delete p.photo;psave();openProf()}};
+$("pback").onclick=()=>{$("prof").hidden=true;$("menu").hidden=false;pcard()};
+$("prenb").onclick=()=>{const p=curP(),n=$("pren").value.trim().slice(0,20);if(p&&n){p.name=n;psave();if(FU&&FB.m.updateProfile)FB.m.updateProfile(FU,{displayName:n}).catch(()=>{});$("pren").value="";openProf()}};
+$("pnewb2").onclick=()=>{if(pCreate($("pnew2").value)){$("pnew2").value="";openProf()}};
+$("pdel").onclick=()=>{const b=$("pdel");if(!b.dataset.arm){b.dataset.arm="1";b.textContent="Tap again to delete for good";return}delete PROF.list[PROF.cur];PROF.cur=Object.keys(PROF.list)[0]||null;psave();$("prof").hidden=true;$("menu").hidden=false;pcard()};
+pcard();fbInit();
 $("lvl").onclick=e=>{const l=e.target.dataset.l;if(!l)return;lvl=+l;[...$("lvl").children].forEach(b=>b.classList.toggle("on",b.dataset.l==l))};
 </script>
 </body>
